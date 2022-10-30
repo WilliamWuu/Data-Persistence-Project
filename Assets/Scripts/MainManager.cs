@@ -17,6 +17,7 @@ public class MainManager : MonoBehaviour
 
     private bool m_Started = false;
     private int m_Points;
+    public string bestName;
     public int bestScore;
 
     private bool m_GameOver = false;
@@ -29,11 +30,11 @@ public class MainManager : MonoBehaviour
 
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
-        BestScoreText.text = $"Best Score : {bestScore} Name : 0 ";
+        BestScoreText.text = $"Best Score : {bestScore} Name : {bestName} ";
 
         int[] pointCountArray = new[] { 1, 1, 2, 2, 5, 5 };
 
-        
+
         for (int i = 0; i < LineCount; ++i)
         {
             for (int x = 0; x < perLine; ++x)
@@ -65,7 +66,7 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SceneManager.LoadScene(0);
             }
         }
     }
@@ -89,6 +90,7 @@ public class MainManager : MonoBehaviour
         if (m_Points > bestScore)
         {
             bestScore = m_Points;
+            bestName = MenuUIHandlerX.username;
         }
     }
 
@@ -96,12 +98,14 @@ public class MainManager : MonoBehaviour
     class SaveData
     {
         public int bestScore;
+        public string bestName;
     }
 
     public void SaveScore()
     {
         SaveData data = new SaveData();
         data.bestScore = bestScore;
+        data.bestName = bestName;
 
         string json = JsonUtility.ToJson(data);
 
@@ -117,6 +121,7 @@ public class MainManager : MonoBehaviour
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
             bestScore = data.bestScore;
+            bestName = data.bestName;
         }
     }
 }
